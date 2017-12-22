@@ -4,6 +4,11 @@
  //cards list
 var card = ["fa-diamond","fa-paper-plane-o","fa-anchor","fa-bolt","fa-cube","fa-leaf","fa-bicycle","fa-bomb"];
 var cards = card.concat(card);
+var appearList = [];
+var number = 0;
+var star_number = 3;
+var time = 0;
+var t;
 
 /*
  * Display the cards on the page
@@ -27,10 +32,24 @@ function shuffle(array) {
     return array;
 }
 
+//timedCount
+function timedCount(){
+	time = time + 1;
+	t = setTimeout("timedCount()",1000);
+}
+
+//stopCount
+function stopCount(){
+	clearTimeout(t);
+}
+
 //restart
 function restart(){
 	$("ul li").removeClass().addClass("card");
 	$(".moves").text(0);
+	stopCount();
+	number = 0;
+	time = 0;
 	for (var j = 0; j < 3; j++) {
 		$("ul:eq(0) li:eq("+ j +") i").removeClass().addClass("fa").addClass("fa-star");
 	}
@@ -49,9 +68,6 @@ $(".restart").on("click",function(){
 $(".restart").trigger("click");
 
 //click cards
-var appearList = [];
-var number = 0;
-var star_number = 3;
 
 $("ul:eq(1) .card").on("click",function(){
 	if($(this).hasClass("open") || $(this).hasClass("match")){
@@ -64,8 +80,12 @@ $("ul:eq(1) .card").on("click",function(){
 			$(this).addClass("open show");
 			//修改步骤
 			number = number + 1;
-			if (number % 2 == 0){
+			if (number % 2 === 0){
 				$(".moves").text(number/2);
+			}
+			//开始计时
+			if (number === 1) {
+				timedCount();
 			}
 			//修改星数
 			if (number/2 > 10 && number/2 <= 15){
@@ -93,7 +113,7 @@ $("ul:eq(1) .card").on("click",function(){
 					appearList.pop();
 				}
 			},500);	
-			//修改步骤
+			//修改步数
 			number = number + 1;
 			if (number % 2 == 0){
 				$(".moves").text(number/2);
@@ -111,9 +131,12 @@ $("ul:eq(1) .card").on("click",function(){
 			}
 			//判断是否成功
 			if (appearList.length === 16){
+				stopCount();
 				$("input:eq(0)").attr("value",number/2);
 				$("input:eq(1)").attr("value",star_number)
+				$("input:eq(2)").attr("value",time);
 				$(":submit").click();
+
 			}
 		}	
 	}

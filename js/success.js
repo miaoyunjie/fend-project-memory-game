@@ -3,6 +3,6 @@ function getQueryString(name) {
 	var r = window.location.search.substr(1).match(reg); 
 	if (r != null) return unescape(r[2]); return null; 
 }
-
-$("span:eq(0)").text(getQueryString("num"));
-$("span:eq(1)").text(getQueryString("star"));
+$("span:eq(0)").text(getQueryString("time"));
+$("span:eq(1)").text(getQueryString("num"));
+$("span:eq(2)").text(getQueryString("star"));
